@@ -7,28 +7,27 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/qpd-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/qpd-{{ version }}.tar.gz
   sha256: e0ed05b88e321ea9935874377bda11339c90f1469f34344e9b41d16b8088e136
 
 build:
-  number: 1
+  number: 2
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv
 
 requirements:
   host:
     - pip
-    - python >=3.7
+    - python {{ python_min }}
+    - setuptools
   run:
     - adagio
     - antlr4-python3-runtime >=4.11.1,<4.12
     - pandas >=1.2.0
-    - python >=3.7
+    - python >={{ python_min }}
     - triad >=0.9.0
 
 test:
-#   source_files:
-#     - tests
   imports:
     - qpd
     - qpd_dask
@@ -38,16 +37,13 @@ test:
     - qpd_version
   commands:
     - pip check
-    # Comment out test suite until ray issue resolved
-#     - pytest -vvv --capture=tee-sys tests
   requires:
     - cloudpickle >=1.4.0
     - dask
     - modin-ray
     - pandas >=1.1.2
-#     - pandasql
     - pip
-#     - pytest    
+    - python {{ python_min }}
 
 about:
   home: https://pypi.org/project/qpd/
